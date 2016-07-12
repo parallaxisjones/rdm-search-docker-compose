@@ -1,14 +1,15 @@
 version: '2'
+
 services:
   elasticsearch:
-    image: elasticsearch:2.3.3
+    image: elasticsearch:2.3.4
     restart: unless-stopped
     ports:
       - 9200:9200
-    # volumes:
-    #   - ./elasticsearch/data:/usr/share/elasticsearch/data
+    volumes:
+      - elasticsearch:/usr/share/elasticsearch/data
   logstash:
-    image: logstash:2.3.2-1
+    image: logstash:2.3.4
     restart: unless-stopped
     command: logstash -f /etc/logstash/conf.d/logstash.conf
     depends_on:
@@ -20,7 +21,7 @@ services:
     links:
       - elasticsearch
   kibana:
-    image: kibana:4.5.1
+    image: kibana:4.5.2
     restart: unless-stopped
     depends_on:
       - elasticsearch
@@ -28,3 +29,7 @@ services:
       - 5601:5601
     links:
       - elasticsearch
+
+volumes:
+  elasticsearch:
+    external: true
