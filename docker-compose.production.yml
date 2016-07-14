@@ -1,0 +1,6 @@
+version: '2'
+
+services:
+  elasticsearch:
+    volumes:
+      - /data/tomcat/elasticsearch:/usr/share/elasticsearch/data
