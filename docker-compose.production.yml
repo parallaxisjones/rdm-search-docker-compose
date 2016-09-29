@@ -5,7 +5,3 @@ services:
     network_mode: host
     volumes:
       - /data/tomcat/elasticsearch:/usr/share/elasticsearch/data
-  logstash:
-    network_mode: host
-  kibana:
-    network_mode: host
