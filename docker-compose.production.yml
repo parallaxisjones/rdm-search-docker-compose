@@ -2,6 +2,5 @@ version: '2'
 
 services:
   elasticsearch:
-    network_mode: host
     volumes:
       - /data/tomcat/elasticsearch:/usr/share/elasticsearch/data
