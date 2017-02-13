@@ -2,11 +2,13 @@ version: '2'
 
 services:
   elasticsearch:
+    environment:
+      ES_HEAP_SIZE: 1g
     volumes:
       - elasticsearch:/usr/share/elasticsearch/data
   logstash:
     environment:
-      LOGSTASH_CONFIG_PATH:
+      - LOGSTASH_CONFIG_PATH
     volumes:
       - ${LOGSTASH_CONFIG_PATH}:/etc/logstash/conf.d/logstash.conf
 

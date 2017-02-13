@@ -4,3 +4,5 @@ services:
   elasticsearch:
     volumes:
       - /data/tomcat/elasticsearch:/usr/share/elasticsearch/data
+    environment:
+      ES_HEAP_SIZE: 4g	  
