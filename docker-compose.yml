@@ -3,13 +3,22 @@ version: '2'
 services:
   elasticsearch:
     image: elasticsearch:2.4.1
+    logging:
+      options:
+       max-size: "40m"
+       max-file: "5"
     restart: unless-stopped
     ports:
       - 9200:9200
+      - 9300:9300
     volumes:
       - ./data:/usr/share/elasticsearch/data
   logstash:
     image: logstash:2.4.0
+    logging:
+      options:
+       max-size: "20m"
+       max-file: "2"
     restart: unless-stopped
     command: logstash -f /etc/logstash/conf.d/logstash.conf
     depends_on:
@@ -22,10 +31,14 @@ services:
       - elasticsearch
   kibana:
     image: kibana:4.6.2
+    logging:
+      options:
+       max-size: "20m"
+       max-file: "2"
     restart: unless-stopped
     depends_on:
       - elasticsearch
     ports:
       - 5601:5601
     links:
-      - elasticsearch
+      - elasticsearchdocker 
