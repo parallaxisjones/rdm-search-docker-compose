@@ -3,15 +3,21 @@ version: '2'
 services:
   elasticsearch:
     environment:
-      ES_HEAP_SIZE: 1g
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g -XX:ParallelGCThreads=1
+      - ELASTICSEARCH_CONFIG_PATH
     volumes:
-      - elasticsearch:/usr/share/elasticsearch/data
+      - esdata1:/usr/share/elasticsearch/data
+      - esbackup1:/usr/share/elasticsearch/backup
+      - $ELASTICSEARCH_CONFIG_PATH:/usr/share/elasticsearch/config/elasticsearch.yml
   logstash:
     environment:
       - LOGSTASH_CONFIG_PATH
+      - LS_JAVA_OPTS=-XX:ParallelGCThreads=1
     volumes:
       - ${LOGSTASH_CONFIG_PATH}:/etc/logstash/conf.d/logstash.conf
 
 volumes:
-  elasticsearch:
+  esdata1:
+    external: true
+  esbackup1:
     external: true

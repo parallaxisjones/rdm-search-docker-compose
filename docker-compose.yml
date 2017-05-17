@@ -2,7 +2,12 @@ version: '2'
 
 services:
   elasticsearch:
-    image: elasticsearch:2.4.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.4.0
+    container_name: elasticsearch1
+    environment:
+      - cluster.name=rdm-elasticsearch
+      - bootstrap.memory_lock
+      - xpack.security.enabled=false
     logging:
       options:
        max-size: "40m"
@@ -12,9 +17,12 @@ services:
       - 9200:9200
       - 9300:9300
     volumes:
-      - ./data:/usr/share/elasticsearch/data
+      - ./esdata1:/usr/share/elasticsearch/data
+      - ./esbackup1:/usr/share/elasticsearch/backup
+      - ./elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
   logstash:
-    image: logstash:2.4.0
+    image: docker.elastic.co/logstash/logstash:5.4.0
+    container_name: logstash1
     logging:
       options:
        max-size: "20m"
@@ -30,7 +38,10 @@ services:
     links:
       - elasticsearch
   kibana:
-    image: kibana:4.6.2
+    image: docker.elastic.co/kibana/kibana:5.4.0
+    container_name: kibana1
+    environment:
+      - xpack.security.enabled=false
     logging:
       options:
        max-size: "20m"
