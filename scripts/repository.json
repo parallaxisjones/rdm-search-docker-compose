@@ -1,0 +1,8 @@
+{
+	"type": "fs",
+	"settings": {
+		"location": "/usr/share/elasticsearch/backup",
+		"compress": true
+	}	
+}
+
