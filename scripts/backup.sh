@@ -4,4 +4,4 @@ if [ $# -ne 2 ]; then
     echo "Usage $me <hostname> <snapshot name>"
 	exit 1
 fi
-curl -XPUT http://$1:9200/_snapshot/rdm_backup/snapshot_$2 --data @repository.json
+curl -XPUT http://$1:9200/_snapshot/rdm_backup/snapshot_$2?wait_for_completion=true --data @backup.json
