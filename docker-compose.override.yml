@@ -8,13 +8,13 @@ services:
     volumes:
       - esdata1:/usr/share/elasticsearch/data
       - esbackup1:/usr/share/elasticsearch/backup
-      - $ELASTICSEARCH_CONFIG_PATH:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
   logstash:
     environment:
       - LOGSTASH_CONFIG_PATH
       - LS_JAVA_OPTS=-XX:ParallelGCThreads=1
     volumes:
-      - ${LOGSTASH_CONFIG_PATH}:/etc/logstash/conf.d/logstash.conf
+      - ./logstash/logstash.conf:/etc/logstash/conf.d/logstash.conf
 
 volumes:
   esdata1:
