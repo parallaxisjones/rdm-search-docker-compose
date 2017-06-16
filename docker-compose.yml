@@ -41,8 +41,6 @@ services:
       - 5044:5044
     volumes:
       - ./logstash/logstash.conf:/etc/logstash/conf.d/logstash.conf
-    links:
-      - elasticsearch
     networks:
       - rdm-network
   kibana:
@@ -59,7 +57,17 @@ services:
       - elasticsearch
     ports:
       - 5601:5601
-    links:
+    networks:
+      - rdm-network
+  elasticsearch-post-startup:
+    image: byrnedo/alpine-curl
+    container_name: rdm-elasticsearch-post-startup
+    restart: 'no'
+    volumes:
+      - ./elasticsearch:/config
+      - ./scripts/elasticsearch_post_startup.sh:/docker-entrypoint.sh
+    entrypoint: /docker-entrypoint.sh
+    depends_on:
       - elasticsearch
     networks:
       - rdm-network
