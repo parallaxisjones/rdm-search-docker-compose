@@ -4,28 +4,44 @@
 
 - [irods_microservice_plugis_curl](https://github.com/donders-research-data-management/irods_microservice_plugins_curl): iRODS cURL microservices with additional support on `PUT` and `DELETE` operations.
 
-## rules
+- [rdm-irods-rules](https://github.com/donders-research-data-management/rdm-irods-rules): RDM rule set.
 
-1. `reindexCollections.r`: rule for reindexing RDM collections
-1. `reindexUsers.r`: rule for reindexing RDM users 
+## server rules
 
-## usage: reindex collection
+Server rules are in the file `rdm-elastic.re`.  To install it, simply do
+
+```bash
+$ cat rdm-elastic.re >> /etc/irods/rdm.re
+```
+
+### repetitive indexing
+
+```bash
+$ irule -F indexCollectionsAsync.r
+$ irule -F indexUsersAsync.r
+```
+
+## client rules
+1. `indexCollections.r`: rule for reindexing RDM collections
+1. `indexUsers.r`: rule for reindexing RDM users 
+
+### usage: reindex collection
 
 Reindex collections which are failed in previous indexing operation:
 
 ```bash
-$ irule -F reindexCollections.r '*elasticIndexURL="http://<elastic-server>:9200/rdm"' '*full="false"'
+$ irule -F indexCollections.r '*elasticIndexURL="http://<elastic-server>:9200/rdm"' '*full="false"'
 ``` 
 
 Reindex all collections:
 
 ```bash
-$ irule -F reindexCollections.r '*elasticIndexURL="http://<elastic-server>:9200/rdm"' '*full="true"'
+$ irule -F indexCollections.r '*elasticIndexURL="http://<elastic-server>:9200/rdm"' '*full="true"'
 ``` 
 
 with `<elastic-server>` replaced by the actual Elastic server.
 
-## usage: reindex object 
+### usage: reindex object 
 
 Reindex users which are failed in previous indexing operation:
 
