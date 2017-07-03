@@ -1,4 +1,4 @@
-reindexCollection {
+reindexCollections {
 
     *qry_attr = "COLL_ID";
     *qry_cond = "META_COLL_ATTR_NAME = 'tobeindexed' AND META_COLL_ATTR_VALUE = '1'";
@@ -61,7 +61,7 @@ rdmIndexCollection( *collId, *elasticIndexURL ) {
     *kvp.'tobeindexed' = '1';
     if ( *ec != 0 ) {
         *ec = errormsg(rdmUpdateCollectionAttributes(*collName, 'add', list(*kvp)), *errmsg);
-        rdmLog(LOG_ERR, '', '[RDM TOBEINDEXED] ' ++ *collId );
+        rdmLog(LOG_ERR, '', '[RDM COLL TOBEINDEXED] ' ++ *collId );
     } else {
         *ec = errormsg(rdmUpdateCollectionAttributes(*collName, 'rm', list(*kvp)), *errmsg);
     }

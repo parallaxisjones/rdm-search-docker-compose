@@ -7,8 +7,9 @@
 ## rules
 
 1. `reindexCollections.r`: rule for reindexing RDM collections
+1. `reindexUsers.r`: rule for reindexing RDM users 
 
-## usage
+## usage: reindex collection
 
 Reindex collections which are failed in previous indexing operation:
 
@@ -20,6 +21,22 @@ Reindex all collections:
 
 ```bash
 $ irule -F reindexCollections.r '*elasticIndexURL="http://<elastic-server>:9200/rdm"' '*full="true"'
+``` 
+
+with `<elastic-server>` replaced by the actual Elastic server.
+
+## usage: reindex object 
+
+Reindex users which are failed in previous indexing operation:
+
+```bash
+$ irule -F reindexUsers.r '*elasticIndexURL="http://<elastic-server>:9200/rdm"' '*full="false"'
+``` 
+
+Reindex all users:
+
+```bash
+$ irule -F reindexUsers.r '*elasticIndexURL="http://<elastic-server>:9200/rdm"' '*full="true"'
 ``` 
 
 with `<elastic-server>` replaced by the actual Elastic server.
