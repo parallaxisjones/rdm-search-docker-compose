@@ -161,7 +161,7 @@
                 }        
             }
         },
-        "collection_snapshot": {
+        "collection_version": {
             "_source": {
                 "excludes": ["collId", "collName", "originalVersionId", "perviousVersionId", "nextVersionId"]
             }, 

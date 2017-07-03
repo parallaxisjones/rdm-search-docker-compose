@@ -16,6 +16,14 @@ rdmIndexCollection( *collId, *elasticIndexURL ) {
     if ( *ec == 0 ) {
         *postFields."data" = *jsonStr;
         *docURL = *elasticIndexURL ++ '/collection/' ++ *collId;
+
+        # compose a different indexing endpoint if the collection is a snapshot
+        *kvp_v.'originalVersionId' = '';
+        msi_json_objops( *jsonStr, *kvp_v, 'get');
+        if ( str(*kvp_v.'originalVersionId') like regex '[0-9]+' ) {
+            *docURL = *elasticIndexURL ++ '/collection_version/' ++ *collId ++ '?parent=' ++ *kvp_v.'originalVersionId';
+        }
+
         *ec = errormsg( msiCurlPut(*docURL, *postFields, *response), *errmsg);
 
         *rsp.'result' = '';
@@ -32,7 +40,10 @@ rdmIndexCollection( *collId, *elasticIndexURL ) {
         *ec = errormsg(rdmUpdateCollectionAttributes(*collName, 'add', list(*kvp)), *errmsg);
         rdmLog(LOG_ERR, '', '[RDM COLL TOBEINDEXED] ' ++ *collId );
     } else {
-        *ec = errormsg(rdmUpdateCollectionAttributes(*collName, 'rm', list(*kvp)), *errmsg);
+        foreach(*c in SELECT COLL_NAME WHERE META_COLL_ATTR_NAME = 'tobeindexed' AND COLL_ID = '*collId') {
+            *ec = errormsg(rdmUpdateCollectionAttributes(*collName, 'rm', list(*kvp)), *errmsg);
+            break;
+        }
     }
 }
 
@@ -69,7 +80,10 @@ rdmIndexUser( *userName, *elasticIndexURL ) {
         *ec = errormsg(rdmSudoUpdateUserAttributes(*userName, 'add', list(*kvp)), *errmsg);
         rdmLog(LOG_ERR, '', '[RDM USER TOBEINDEXED] ' ++ *userName );
     } else {
-        *ec = errormsg(rdmSudoUpdateUserAttributes(*userName, 'rm', list(*kvp)), *errmsg);
+        foreach(*c in SELECT USER_NAME WHERE META_USER_ATTR_NAME = 'tobeindexed' AND USER_NAME = '*userName') {
+            *ec = errormsg(rdmSudoUpdateUserAttributes(*userName, 'rm', list(*kvp)), *errmsg);
+            break;
+        }
     }
 }
 
@@ -85,7 +99,7 @@ rdmIndexUser( *userName, *elasticIndexURL ) {
 #-----------------------------------------------------------------------
 rdmIndexAllCollections(*elasticIndexURL, *full) {
 
-    *qry_attr = "COLL_ID";
+    *qry_attr = "COLL_ID, COLL_NAME";
     *qry_cond = "META_COLL_ATTR_NAME = 'tobeindexed' AND META_COLL_ATTR_VALUE = '1'";
 
     if ( bool(*full) ) {
@@ -105,10 +119,16 @@ rdmIndexAllCollections(*elasticIndexURL, *full) {
  
     *cntIdxOld = 1;
 
-    *collIds = list(); 
+    *collIds = list();
+    *sCollIds = list();
     while( *cntIdxOld > 0 ) { 
         foreach(*r in *qry_out ) {
-            *collIds = cons( *r.COLL_ID, *collIds); 
+            *vdata = split(*r.COLL_NAME, ':');
+            if ( elem(*vdata, size(*vdata)-1) like regex COL_VERS_REGEX ) {
+                *sCollIds = cons( *r.COLL_ID, *sCollIds);
+            } else {
+                *collIds = cons( *r.COLL_ID, *collIds); 
+            }
         }
         *cntIdxOld = *cntIdx;
         if ( *cntIdxOld > 0 ) {
@@ -116,7 +136,15 @@ rdmIndexAllCollections(*elasticIndexURL, *full) {
         }
     }
 
+    # update/create master collections
     foreach(*collId in *collIds) {
+        if ( errormsg( rdmIndexCollection( *collId, *elasticIndexURL ), *errmsg) != 0 ) {
+            rdmLog(LOG_ERR, 'rdmIndexAllCollections', 'failed to index collection id:' ++ *collId ++ ' error: ' ++ *errmsg);
+        }
+    }
+
+    # update/create snapshot collections
+    foreach(*collId in *sCollIds) {
         if ( errormsg( rdmIndexCollection( *collId, *elasticIndexURL ), *errmsg) != 0 ) {
             rdmLog(LOG_ERR, 'rdmIndexAllCollections', 'failed to index collection id:' ++ *collId ++ ' error: ' ++ *errmsg);
         }
