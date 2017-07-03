@@ -1,0 +1,285 @@
+{
+    "mappings": {
+        "user": {
+            "_source": {
+                "excludes": ["irodsUserName"]
+            },
+            "properties": {
+                "givenName": {
+                    "type": "text"
+                },
+                "surName": {
+                    "type": "text"
+                },
+                "displayName": {
+                    "type": "text"            
+                },
+                "homeOrganisation": {
+                    "type": "keyword"
+                },
+                "organisationalUnits": {
+                    "type": "keyword"
+                },
+                "isAdminOf": {
+                    "type" : "keyword"
+                },
+                "email": {
+                    "type": "keyword"
+                },
+                "emailFrequencyCollectionChanges": {
+                    "type" : "keyword"        
+                },
+                "researcherId": {
+                    "type": "keyword"
+                },
+                "openResearcherAndContributorId": {
+                    "type": "keyword"
+                },
+                "personalWebsite": {
+                    "type": "keyword"
+                },
+                "attributeLastUpdatedDateTime": {
+                    "type": "date",
+                    "format": "strict_date_optional_time||epoch_millis"
+                }
+            }
+        },
+        "collection":  {
+            "_source": {
+                "excludes": ["collId", "collName", "latestVersionId"]
+            }, 
+            "properties": {
+                "collectionIdentifier": {
+                    "type": "keyword"
+                },
+                "type" : {
+                    "type": "keyword"
+                },        
+                "organisation": {
+                    "type": "keyword"
+                },
+                "organisationalUnit": {
+                    "type": "keyword"
+                },
+                "projectId": {
+                    "type": "keyword"
+                },
+                "title": {
+                    "type": "text"
+                },
+                "quotaInBytes": {
+                    "type": "long"
+                },
+                "preservationTimeYear": {
+                    "type": "short"
+                },
+                "descriptionAbstract": {
+                    "type": "text"
+                },
+                "publisher": {
+                    "type": "text"
+                },
+                "state": {
+                    "type": "keyword"
+                },
+                "creationDateTime": {
+                    "type": "date",
+                    "format": "strict_date_optional_time||epoch_millis"
+                },
+                "attributeLastUpdateDateTime": {
+                    "type": "date",
+                    "format": "strict_date_optional_time||epoch_millis"
+                },
+                "lastClosedDateTime": {
+                    "type": "date",
+                    "format": "strict_date_optional_time||epoch_millis"
+                },        
+                "sizeInBytes": {
+                    "type": "long"
+                },
+                "versionNumber": {
+                    "type": "short"
+                },
+                "dataUseAgreement": {
+                    "type": "keyword"
+                },
+                "identifierDOI": {
+                    "type": "keyword"
+                },
+                "identifierEPIC": {
+                    "type": "keyword"
+                },        
+                "embargoUntilDateTime": {
+                    "type": "date",
+                    "format": "strict_date_optional_time||epoch_millis"
+                },
+                "manager": {
+                    "type": "keyword"
+                },
+                "contributor": {
+                    "type": "keyword"
+                },
+                "viewer": {
+                    "type": "keyword"
+                },
+                "creatorList": {
+                    "type": "text"
+                },
+                "associatedPublication": {
+                    "type": "nested",
+                    "properties": {
+                        "id": {
+                            "type": "keyword"
+                        },
+                        "system": {
+                            "type": "keyword"
+                        }
+                    }
+                },
+                "keywords_freetext": {
+                    "type": "keyword"
+                },
+                "keywords_SFN_2013": {
+                    "type": "keyword"
+                },
+                "keywords_MeSH_2015": {
+                    "type": "keyword"
+                },        
+                "ethicalApprovalIdentifier": {
+                    "type": "nested",
+                    "properties": {
+                        "caseId": {
+                            "type": "keyword"
+                        },
+                        "reviewBoardName": {
+                            "type": "text"
+                        }
+                    }
+                },
+                "numberOfFiles": {
+                    "type": "long"
+                }        
+            }
+        },
+        "collection_snapshot": {
+            "_source": {
+                "excludes": ["collId", "collName", "originalVersionId", "perviousVersionId", "nextVersionId"]
+            }, 
+            "_parent": {
+                "type": "collection"
+            },
+            "properties": {
+                "collectionIdentifier": {
+                    "type": "keyword"
+                },
+                "type" : {
+                    "type": "keyword"
+                },        
+                "organisation": {
+                    "type": "keyword"
+                },
+                "organisationalUnit": {
+                    "type": "keyword"
+                },
+                "projectId": {
+                    "type": "keyword"
+                },
+                "title": {
+                    "type": "text"
+                },
+                "quotaInBytes": {
+                    "type": "long"
+                },
+                "preservationTimeYear": {
+                    "type": "short"
+                },
+                "descriptionAbstract": {
+                    "type": "text"
+                },
+                "publisher": {
+                    "type": "text"
+                },
+                "state": {
+                    "type": "keyword"
+                },
+                "creationDateTime": {
+                    "type": "date",
+                    "format": "strict_date_optional_time||epoch_millis"
+                },
+                "attributeLastUpdateDateTime": {
+                    "type": "date",
+                    "format": "strict_date_optional_time||epoch_millis"
+                },
+                "lastClosedDateTime": {
+                    "type": "date",
+                    "format": "strict_date_optional_time||epoch_millis"
+                },        
+                "sizeInBytes": {
+                    "type": "long"
+                },
+                "versionNumber": {
+                    "type": "short"
+                },
+                "dataUseAgreement": {
+                    "type": "keyword"
+                },
+                "identifierDOI": {
+                    "type": "keyword"
+                },
+                "identifierEPIC": {
+                    "type": "keyword"
+                },        
+                "embargoUntilDateTime": {
+                    "type": "date",
+                    "format": "strict_date_optional_time||epoch_millis"
+                },
+                "manager": {
+                    "type": "keyword"
+                },
+                "contributor": {
+                    "type": "keyword"
+                },
+                "viewer": {
+                    "type": "keyword"
+                },
+                "creatorList": {
+                    "type": "text"
+                },
+                "associatedPublication": {
+                    "type": "nested",
+                    "properties": {
+                        "id": {
+                            "type": "keyword"
+                        },
+                        "system": {
+                            "type": "keyword"
+                        }
+                    }
+                },
+                "keywords_freetext": {
+                    "type": "keyword"
+                },
+                "keywords_SFN_2013": {
+                    "type": "keyword"
+                },
+                "keywords_MeSH_2015": {
+                    "type": "keyword"
+                },        
+                "ethicalApprovalIdentifier": {
+                    "type": "nested",
+                    "properties": {
+                        "caseId": {
+                            "type": "keyword"
+                        },
+                        "reviewBoardName": {
+                            "type": "text"
+                        }
+                    }
+                },
+                "numberOfFiles": {
+                    "type": "long"
+                }        
+            }
+        }
+    }
+}

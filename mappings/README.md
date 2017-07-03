@@ -1,23 +1,9 @@
 # ElasticSearch Mapping files for RDM objects
 
-- Collection: collection.json
-- User: user.json
-- Eventlog: eventlog.json
+- `mapping.json`: mapping file for the `rdm` index of elastic
 
 ## create index
 
 ```bash
-$ curl -XPUT http://<elastic-server>:9200/rdm
-```
-
-## create mapping for collection
-
-```bash
-$ curl -XPUT -H 'Content-Type: application/json' -d @collection.json http://<elastic-server>:9200/rdm/_mapping/collection
-```
-
-## create mapping for user 
-
-```bash
-$ curl -XPUT -H "Content-Type: application/json" -d @user.json http://<elastic-server>:9200/rdm/_mapping/user
+$ curl -XPUT -d @mapping.json http://<elastic-server>:9200/rdm
 ```
