@@ -1,4 +1,4 @@
-indexUsers {
+indexUsersAsync {
     delay('<EF>10m REPEAT FOR EVER</EF>') {
         rdmIndexAllUsers(*elasticIndexURL, *full);
     }
