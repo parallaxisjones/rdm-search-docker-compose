@@ -14,7 +14,9 @@ Server rules are in the file `rdm-elastic.re`.  To install it, simply do
 $ cat rdm-elastic.re >> /etc/irods/rdm.re
 ```
 
-### repetitive indexing
+### cron-like background indexing
+
+These rules runs every 10 minutes, and update those objects failing their previous indexing operation.
 
 ```bash
 $ irule -F indexCollectionsAsync.r
