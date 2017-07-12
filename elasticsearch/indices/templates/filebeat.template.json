@@ -1,5 +1,6 @@
 {
   "template": "filebeat-*",
+  "version" : 1,
   "mappings": {
     "log": {
       "properties": {

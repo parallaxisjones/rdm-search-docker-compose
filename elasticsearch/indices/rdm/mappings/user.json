@@ -1,0 +1,44 @@
+{
+    "_source": {
+        "excludes": ["irodsUserName"]
+    },
+	"properties": {
+		"givenName": {
+			"type": "text"
+		},
+		"surName": {
+			"type": "text"
+		},
+		"displayName": {
+			"type": "text"			
+		},
+		"homeOrganisation": {
+			"type": "keyword"
+		},
+		"organisationalUnits": {
+			"type": "keyword"
+		},
+		"isAdminOf": {
+			"type" : "keyword"
+		},
+		"email": {
+			"type": "keyword"
+		},
+        "emailFrequencyCollectionChanges": {
+			"type" : "keyword"		
+		},
+		"researcherId": {
+			"type": "keyword"
+		},
+		"openResearcherAndContributorId": {
+			"type": "keyword"
+		},
+		"personalWebsite": {
+			"type": "keyword"
+		},
+		"attributeLastUpdatedDateTime": {
+			"type": "date",
+			"format": "strict_date_optional_time||epoch_millis"
+		}
+	}
+}
