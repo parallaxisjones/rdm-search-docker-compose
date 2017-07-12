@@ -1,0 +1,53 @@
+{
+  "template": "filebeat-*",
+  "version" : 1,
+  "mappings": {
+    "log": {
+      "properties": {
+        "rdm-event": {
+          "properties": {
+            "action": {
+              "type": "string"
+            },
+            "context": {
+              "properties": {
+                "action": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "scope": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
+            "id": {
+              "type": "string"
+            },
+            "scope": {
+              "type": "string"
+            },
+            "timestamp": {
+              "type": "date",
+              "format": "strict_date_optional_time||epoch_millis"
+            },
+            "user": {
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "ip_address": {
+                  "type": "ip"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

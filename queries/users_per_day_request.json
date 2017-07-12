@@ -1,0 +1,57 @@
+{
+	"from" : 0,
+	"size" : 0,
+	"sort" : [
+		{
+			"rdm-event.timestamp" : {"order" : "desc"}
+		}
+	],
+	"fields": [
+		"_source"
+	  ],	
+	"_source": {
+		"includes" : [ "rdm-event" ]
+	},
+	"aggregations" : {
+		"users_per_day" : {
+			"date_histogram" : {
+				"field" : "rdm-event.timestamp",
+				"interval" : "day"
+			},
+			"aggregations": {
+				"number_of_users": {
+					"cardinality": {
+						"script": {
+							"file": "rawUserId",
+							"lang" : "groovy"
+						}
+					}
+				}
+			}			
+		},
+		"user_stats" : {
+			"stats_bucket" : {
+				"buckets_path" : "users_per_day>number_of_users"
+			}
+		}
+	},
+	"query" : {
+		"filtered" : {
+			"query" : {
+				"match_all" : {}
+			},
+			"filter" : {
+				"bool" : {
+					"must" : [
+						{"exists" : {
+							"field" : "rdm-event"
+						}}
+					],
+					"must_not" : {
+						"match" : { "rdm-event.user.id" : "irods" }
+					}
+				}				
+			}
+		}
+	}
+}

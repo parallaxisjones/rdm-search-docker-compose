@@ -1,0 +1,11 @@
+{
+  "query": {
+    "bool": {
+      "filter": {
+        "term": {
+          "tags": "_grokparsefailure"
+        }
+      }
+    }
+  }
+}

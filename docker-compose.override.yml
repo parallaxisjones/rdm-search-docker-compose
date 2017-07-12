@@ -1,0 +1,23 @@
+version: '2'
+
+services:
+  elasticsearch:
+    environment:
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g -XX:ParallelGCThreads=1
+      - ELASTICSEARCH_CONFIG_PATH
+    volumes:
+      - esdata1:/usr/share/elasticsearch/data
+      - esbackup1:/usr/share/elasticsearch/backup
+      - ./elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+  logstash:
+    environment:
+      - LOGSTASH_CONFIG_PATH
+      - LS_JAVA_OPTS=-XX:ParallelGCThreads=1
+    volumes:
+      - ./logstash/logstash.conf:/etc/logstash/conf.d/logstash.conf
+
+volumes:
+  esdata1:
+    external: true
+  esbackup1:
+    external: true

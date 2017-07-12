@@ -1,0 +1,76 @@
+version: '2'
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.4.0
+    container_name: rdm-elasticsearch
+    environment:
+      - cluster.name=rdm-elasticsearch
+      - bootstrap.memory_lock=true
+      - xpack.security.enabled=false
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    logging:
+      options:
+       max-size: "40m"
+       max-file: "5"
+    restart: unless-stopped
+    ports:
+      - 9200:9200
+      - 9300:9300
+    volumes:
+      - ./esdata1:/usr/share/elasticsearch/data
+      - ./esbackup1:/usr/share/elasticsearch/backup
+      - ./elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    networks:
+      - rdm-network
+  logstash:
+    image: docker.elastic.co/logstash/logstash:5.4.0
+    container_name: rdm-logstash
+    logging:
+      options:
+       max-size: "20m"
+       max-file: "2"
+    restart: unless-stopped
+    command: logstash -f /etc/logstash/conf.d/logstash.conf
+    depends_on:
+      - elasticsearch
+    ports:
+      - 5044:5044
+    volumes:
+      - ./logstash/logstash.conf:/etc/logstash/conf.d/logstash.conf
+    networks:
+      - rdm-network
+  kibana:
+    image: docker.elastic.co/kibana/kibana:5.4.0
+    container_name: rdm-kibana
+    environment:
+      - xpack.security.enabled=false
+    logging:
+      options:
+       max-size: "20m"
+       max-file: "2"
+    restart: unless-stopped
+    depends_on:
+      - elasticsearch
+    ports:
+      - 5601:5601
+    networks:
+      - rdm-network
+  elasticsearch-post-startup:
+    image: byrnedo/alpine-curl
+    container_name: rdm-elasticsearch-post-startup
+    restart: 'no'
+    volumes:
+      - ./elasticsearch:/config
+      - ./scripts/elasticsearch_post_startup.sh:/docker-entrypoint.sh
+    entrypoint: /docker-entrypoint.sh
+    depends_on:
+      - elasticsearch
+    networks:
+      - rdm-network
+networks:
+  rdm-network:
+    external: true

@@ -1,0 +1,5 @@
+{
+  "indices": "filebeat-*",
+  "ignore_unavailable": true,
+  "include_global_state": true
+}

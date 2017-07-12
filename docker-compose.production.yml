@@ -1,0 +1,9 @@
+version: '2'
+
+services:
+  elasticsearch:
+    volumes:
+      - /data/tomcat/elasticsearch/data:/usr/share/elasticsearch/data
+      - /data/tomcat/elasticsearch/backup:/usr/share/elasticsearch/backup
+    environment:
+      - ES_JAVA_OPTS=-Xms4g -Xmx4g
