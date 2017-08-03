@@ -40,17 +40,55 @@ function createCollection(collections, i) {
 	if (i < collections.length) {
 		var collection = collections[i];
 		var collId =  collection.collId;
-		var endPoint = endpointElastic + 'collection' + '/' + collection.collId;
+		var index = 'collection';
+		var parentParameter = '';
+		if (collection.parentVersion) {
+			index = 'collection_version';
+			parentParameter = '?parent=' + collection.parentVersion;
+		}
+		var endPoint = endpointElastic + index + '/' + collection.collId + parentParameter;
 		transformCollection(collection);		
 		var putRequest = { url: endPoint, method: 'put', json: collection};
 		request(putRequest, function(error, request, body) {
+			// console.log(body);
 			createCollection(collections, i + 1);
 		});			
 	}	
 }
 
+function enrichCollectionsWithParentVersions(collections) {
+	var collectionsByIdentifier = {};
+	for (var i = 0; i < collections.length; i++) {
+		var collection = collections[i];
+		if (!collectionsByIdentifier[collection.collectionIdentifier]) {
+			collectionsByIdentifier[collection.collectionIdentifier] = [];			
+		}		
+		collectionsByIdentifier[collection.collectionIdentifier].push(collection);
+	}
+	//console.log(JSON.stringify(collectionsByIdentifier['di.dcc.DAC_2016.00215_773']));
+	for (var collectionIdentifier in collectionsByIdentifier) {		
+		var collectionsSameIdentifier = collectionsByIdentifier[collectionIdentifier];
+		var parentCollection = null;
+		// console.log('parent version found' + typeof collectionsSameIdentifier);
+		for (var i = 0; i < collectionsSameIdentifier.length; i++) {						
+			var collectionSameIdentifier = collectionsSameIdentifier[i];			
+			if (!collectionSameIdentifier.versionNumber) {
+				parentCollection = collectionSameIdentifier;
+			}
+		}
+		for (var i = 0; i < collectionsSameIdentifier.length; i++) {
+			var collectionSameIdentifier = collectionsSameIdentifier[i];
+			if (collectionSameIdentifier.versionNumber) {
+				collectionSameIdentifier.parentVersion = parentCollection.collId;
+			}
+		}		
+	}
+	// console.log(JSON.stringify(collectionsByIdentifier));
+}
+
 function createCollections(collectionsResponse) {	
 	var collections = collectionsResponse.collections;	
+	enrichCollectionsWithParentVersions(collections);
 	createCollection(collections, 0);
 	console.log('Creating ' + collections.length + ' collections');
 }
